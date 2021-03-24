@@ -77,6 +77,21 @@ class BossVC: UIViewController {
 
     }
     
+    private func closeAllCell(){
+        var index = -1
+        for (i,item) in dataArr.enumerated(){
+            if(item.isOpen){
+                item.isOpen = false
+                index = i
+                break
+            }
+        }
+        if(index != -1){
+            let idx = IndexPath.init(item: index, section: 0)
+            tableView.reloadRows(at: [idx], with: .fade)
+        }
+    }
+    
     private func setFooterView(){
         footerView.frame = CGRect.init(x: 0, y: 0, width: lee_screenW, height:  130)
         footerView.addSubview(lee_inputView)
@@ -193,25 +208,16 @@ extension BossVC:UITableViewDelegate,UITableViewDataSource{
         }else{
             tableView.reloadRows(at: [indexPath], with: .fade)
         }
-       
-        
-        
-//        let model = dataArr[indexPath.row]
-//        model.isOpen = !model.isOpen
-//        for m in dataArr{
-//            if(m.sectionTitle != model.sectionTitle){
-//                m.isOpen = false
-//            }
-//        }
-//        tableView.reloadData()
-////        tableView.reloadRows(at: [indexPath], with: .fade)
-//        view.endEditing(true)
     }
-    
     
 }
 
 extension BossVC:UITextViewDelegate{
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        closeAllCell()
+    }
+    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
             
         if (text == "\n") {
